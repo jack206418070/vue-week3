@@ -281,9 +281,9 @@ app.component('modal', {
             <label for="file">封面圖片</label>
             <input @change="upload('single')" type="file" class="bg--white" id="file" name="filename"  placeholder="請輸入圖片連結" >
             <template v-if="tempProduct.imageUrl">
-                <div class="file__img">
+                <div class="file__img mt-2">
                         <div class="file__img__del" @click="tempProduct.imageUrl = '' ">刪除</div>
-                        <img class="pe-3" style="height: 80px" :src="tempProduct.imageUrl">
+                        <img style="height: 80px" :src="tempProduct.imageUrl">
                 </div>
             </template>
         </div>
@@ -291,9 +291,9 @@ app.component('modal', {
                 <label for="file">多層圖片</label>
                 <input @change="upload('mult')" type="file" class="bg--white" id="file2" name="filename"  placeholder="請輸入圖片連結">
                 <template v-if="tempProduct.imagesUrl.length > 0">
-                    <div class="file__img" v-for="(image, key) in tempProduct.imagesUrl" :key="image">
+                    <div class="file__img me-2 mt-2" v-for="(image, key) in tempProduct.imagesUrl" :key="image">
                         <div class="file__img__del" @click="tempProduct.imagesUrl.splice(key, 1)">刪除</div>
-                        <img class="pe-3" style="height: 80px" :src="image" >
+                        <img style="height: 80px;" :src="image" >   
                     </div>
                 </template>
         </div>

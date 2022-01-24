@@ -44,6 +44,9 @@
       .mb-#{$i} {
           margin-bottom: $i * 4px;
       }
+      .mt-#{$i} {
+        margin-top: $i * 4px;
+    }
   }
   
   .bg{
@@ -75,6 +78,9 @@
   }
   .d-flex{
       display: flex;
+  }
+  .d-block{
+      display: block;
   }
   .align-self-end{
       align-self:flex-end;
