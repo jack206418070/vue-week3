@@ -47,7 +47,7 @@ const app = createApp({
         },
         getProducts(page = 1) {
             this.is_loading = true;
-            this.tempProduct = {};
+            this.filterType = 'all';
             axios.get(`${this.apiUrl}/api/${this.path}/admin/products?page=${page}`)
                 .then((res) => {
                     if (res.data.success) {
@@ -118,7 +118,10 @@ const app = createApp({
                 this.tempProducts = [];
                 return this.products;
             }else if(this.filterType === 'price'){
-                this.tempProducts.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
+                this.tempProducts.length === 0 ? 
+                    this.tempProducts = JSON.parse(JSON.stringify(this.products)) :
+                    this.tempProducts;
+                    this.tempProducts.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
                 return this.tempProducts;
             }else if(this.filterType === 'search'){
                 if(this.searchText === ''){
@@ -132,8 +135,6 @@ const app = createApp({
                         }
                     })
                 }
-                console.log(this.searchText,this.tempProducts);
-                // this.searchText = '';
                 return this.tempProducts;
             }
         }
