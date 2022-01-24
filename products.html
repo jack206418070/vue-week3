@@ -145,9 +145,20 @@
                         </ul>
                     </div>
                 </div>
+                <ul class="pagination d-flex align-items-center jy-content-center">
+                    <li v-show="pagination.has_pre" class="pagination__prev" @click="getProducts(pagination.current_page - 1)"><span><i class="fas fa-chevron-left"></i>Prev</span></li>
+                    <li class="pagination__item" 
+                        v-for="page in pagination.total_pages" 
+                        :key="page"
+                        :class="{'active': page === pagination.current_page}"
+                        @click="getProducts(page)">
+                        <span>{{ page }}</span>
+                    </li>
+                    <li v-show="pagination.has_next" class="pagination__next" @click="getProducts(pagination.current_page + 1)"> <span>Next<i class="fas fa-chevron-right"></i></span></li>
+                </ul>
             </div>
+        </section>
     </div>
-    </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <script type="module" src="./src/js/product.js"></script>

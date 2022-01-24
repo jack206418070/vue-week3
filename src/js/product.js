@@ -19,6 +19,7 @@ const app = createApp({
                 imagesUrl: []
             },
             searchText: '',
+            pagination:{}
         }
     },
     methods: {
@@ -43,13 +44,14 @@ const app = createApp({
                     console.log(err);
                 })
         },
-        getProducts(){
+        getProducts(page = 1){
             this.is_loading = true;
             this.tempProduct = {};
-            axios.get(`${this.apiUrl}/api/${this.path}/admin/products`)
+            axios.get(`${this.apiUrl}/api/${this.path}/admin/products?page=${page}`)
                 .then((res) => {
                     if(res.data.success) {
                         this.products = res.data.products;
+                        this.pagination = res.data.pagination;
                         this.is_loading = false;
                     }
                 })
