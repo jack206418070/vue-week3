@@ -19,7 +19,8 @@ const app = createApp({
                 imagesUrl: []
             },
             searchText: '',
-            pagination: {}
+            pagination: {},
+            filterType:'all',
         }
     },
     methods: {
@@ -113,8 +114,28 @@ const app = createApp({
     },
     computed: {
         filterProducts() {
-            this.products.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
-            return this.products;
+            if(this.filterType === 'all'){
+                this.tempProducts = [];
+                return this.products;
+            }else if(this.filterType === 'price'){
+                this.tempProducts.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
+                return this.tempProducts;
+            }else if(this.filterType === 'search'){
+                if(this.searchText === ''){
+                    this.tempProducts = JSON.parse(JSON.stringify(this.products));
+                    return this.products;
+                }else{
+                    this.tempProducts = [];
+                    this.products.forEach(product => {
+                        if (product.title.match(this.searchText.trim())) {
+                            this.tempProducts.push(product);
+                        }
+                    })
+                }
+                console.log(this.searchText,this.tempProducts);
+                // this.searchText = '';
+                return this.tempProducts;
+            }
         }
     },
     mounted() {
@@ -151,7 +172,6 @@ app.component('modal', {
             axios.post(`${this.apiUrl}/api/${this.path}/admin/upload`, formData)
                 .then((res) => {
                     if (res.data.success) {
-                        console.log(res.data.imageUrl);
                         if (type === 'single') {
                             this.tempProduct.imageUrl = res.data.imageUrl;
                         } else {

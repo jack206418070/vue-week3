@@ -1428,7 +1428,7 @@ section > .content .container {
 
 .search__btn {
   position: absolute;
-  width: 35px;
+  width: 30%;
   height: 35px;
   background: #1A535C;
   top: 0;
@@ -1437,10 +1437,8 @@ section > .content .container {
   margin: auto;
   text-align: center;
   cursor: pointer;
-}
-
-.search__btn i {
   color: #fff;
+  font-weight: bold;
   line-height: 35px;
 }
 
