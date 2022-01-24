@@ -5,8 +5,8 @@ const app = createApp({
         return {
             apiUrl: 'https://vue3-course-api.hexschool.io/v2',
             path: 'ginjack',
-            categoryArr: ['蔬果','海鮮','肉品'],
-            modalControl:{
+            categoryArr: ['蔬果', '海鮮', '肉品'],
+            modalControl: {
                 is_add: false,
                 is_edit: false,
                 is_sideMenu: true
@@ -19,22 +19,22 @@ const app = createApp({
                 imagesUrl: []
             },
             searchText: '',
-            pagination:{}
+            pagination: {}
         }
     },
     methods: {
-        checkLogin(){
+        checkLogin() {
             this.is_loading = true;
             axios.post(`${this.apiUrl}/api/user/check`)
                 .then((res) => {
-                    if(res.data.success) this.getProducts();
+                    if (res.data.success) this.getProducts();
                 })
                 .catch((err) => {
                     alert('驗證碼失效或者錯誤');
                     document.location = `./index.html`;
                 })
         },
-        logout(){
+        logout() {
             axios.post(`${this.apiUrl}/logout`)
                 .then(res => {
                     alert('登出成功');
@@ -44,12 +44,12 @@ const app = createApp({
                     console.log(err);
                 })
         },
-        getProducts(page = 1){
+        getProducts(page = 1) {
             this.is_loading = true;
             this.tempProduct = {};
             axios.get(`${this.apiUrl}/api/${this.path}/admin/products?page=${page}`)
                 .then((res) => {
-                    if(res.data.success) {
+                    if (res.data.success) {
                         this.products = res.data.products;
                         this.pagination = res.data.pagination;
                         this.is_loading = false;
@@ -59,37 +59,37 @@ const app = createApp({
                     console.dir(err);
                 })
         },
-        deleteProduct(id){
+        deleteProduct(id) {
             this.is_loading = true;
             axios.delete(`${this.apiUrl}/api/${this.path}/admin/product/${id}`)
                 .then((res) => {
-                    if(res.data.success){
+                    if (res.data.success) {
                         this.getProducts();
                     }
                 })
                 .catch((err) => {
                     console.log(err.response);
-                }) 
+                })
         },
-        clearProduct(type){
-            this.tempProduct = {is_enabled: 0}
+        clearProduct(type) {
+            this.tempProduct = { is_enabled: 0 }
             type === 'add' ? this.is_add = false : this.is_edit = false;
         },
-        closeModal(){
+        closeModal() {
             this.modalControl.is_add = false;
             this.modalControl.is_edit = false;
         },
-        loadingHandler(){
+        loadingHandler() {
             this.is_loading = !this.is_loading;
         },
-        editProduct(id){
+        editProduct(id) {
             this.is_loading = true;
             this.editTempProduct.is_enabled = !this.editTempProduct.is_enabled;
-            const data = {data:{...this.editTempProduct}}
+            const data = { data: { ...this.editTempProduct } }
             this.modalControl.is_add = false;
-            axios.put(`${this.apiUrl}/api/${this.path}/admin/product/${id}`,data)
+            axios.put(`${this.apiUrl}/api/${this.path}/admin/product/${id}`, data)
                 .then((res) => {
-                    if(res.data.success){
+                    if (res.data.success) {
                         this.getProducts();
                         this.editTempProduct = {};
                     }
@@ -98,26 +98,26 @@ const app = createApp({
                     console.dir(err);
                 })
         },
-        searchHandler(){
-            if(this.searchText === ''){
+        searchHandler() {
+            if (this.searchText === '') {
                 this.getProducts();
             }
             let tempData = [];
             this.products.forEach(product => {
-                if(product.title.match(this.searchText)){
+                if (product.title.match(this.searchText)) {
                     tempData.push(product);
                 }
             })
             this.products = tempData;
         }
     },
-    computed:{
-        filterProducts(){
-            this.products.sort((a,b) => this.ascending ? a.price - b.price : b.price - a.price);
+    computed: {
+        filterProducts() {
+            this.products.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
             return this.products;
         }
     },
-    mounted(){
+    mounted() {
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
         axios.defaults.headers.common['Authorization'] = token;
         this.checkLogin();
@@ -125,23 +125,23 @@ const app = createApp({
 })
 
 
-app.component('modal',{
-    emits: ['close-modal','loading','getProducts'],
-    props:['modaltype','product', 'category'],
-    data(){
-        return{
+app.component('modal', {
+    emits: ['close-modal', 'loading', 'getProducts'],
+    props: ['modaltype', 'product', 'category'],
+    data() {
+        return {
             modalTitle: '',
             tempProduct: {},
             apiUrl: 'https://vue3-course-api.hexschool.io/v2',
             path: 'ginjack',
         }
     },
-    methods:{
-        upload(type){
+    methods: {
+        upload(type) {
             let fileInput;
-            if(type === "mult") {
+            if (type === "mult") {
                 fileInput = document.querySelector('#file2')
-            }else{
+            } else {
                 fileInput = document.querySelector('#file');
             }
             const file = fileInput.files[0];
@@ -150,11 +150,11 @@ app.component('modal',{
             this.$emit('loading');
             axios.post(`${this.apiUrl}/api/${this.path}/admin/upload`, formData)
                 .then((res) => {
-                    if(res.data.success){
+                    if (res.data.success) {
                         console.log(res.data.imageUrl);
-                        if(type === 'single'){
+                        if (type === 'single') {
                             this.tempProduct.imageUrl = res.data.imageUrl;
-                        }else{
+                        } else {
                             this.tempProduct.imagesUrl.push(res.data.imageUrl);
                         }
                         this.$emit('loading');
@@ -164,13 +164,13 @@ app.component('modal',{
                     console.dir(err.response);
                 })
         },
-        editProduct(id){
+        editProduct(id) {
             this.$emit('loading');
-            const data = {data:{...this.tempProduct}}
+            const data = { data: { ...this.tempProduct } }
             this.$emit('close-modal');
-            axios.put(`${this.apiUrl}/api/${this.path}/admin/product/${id}`,data)
+            axios.put(`${this.apiUrl}/api/${this.path}/admin/product/${id}`, data)
                 .then((res) => {
-                    if(res.data.success){
+                    if (res.data.success) {
                         this.$emit('getProducts');
                         this.tempProduct = {};
                     }
@@ -182,10 +182,10 @@ app.component('modal',{
         addProduct() {
             this.$emit('close-modal');
             this.$emit('loading');
-            const data = {data:{...this.tempProduct}};
+            const data = { data: { ...this.tempProduct } };
             axios.post(`${this.apiUrl}/api/${this.path}/admin/product`, data)
                 .then((res) => {
-                    if(res.data.success){
+                    if (res.data.success) {
                         this.$emit('getProducts');
                         this.tempProduct = {};
                     }
@@ -195,14 +195,14 @@ app.component('modal',{
                 })
         },
     },
-    created(){
-        if(this.modaltype.is_add){
+    created() {
+        if (this.modaltype.is_add) {
             this.modalTitle = '新增產品';
             this.tempProduct = {
                 imagesUrl: [],
                 is_enabled: 0
             };
-        }else{
+        } else {
             this.modalTitle = '編輯產品';
             this.tempProduct = JSON.parse(JSON.stringify(this.product));
         }
@@ -284,6 +284,30 @@ app.component('modal',{
         <a v-else @click.prevent="editProduct(tempProduct.id)"  class="btn btn--success" href="#">修改產品</a>
     </div>
 </div>
+    `
+})
+
+app.component('pagination', {
+    props: ['pagination'],
+    emits: ['getProduct'],
+    data(){
+        return{
+
+        }
+    },
+    template: `
+    <ul class="pagination d-flex align-items-center jy-content-center">
+        <li v-show="pagination.has_pre" class="pagination__prev" @click="$emit('getProduct',pagination.current_page - 1)"><span><i class="fas fa-chevron-left"></i>Prev</span></li>
+        <li class="pagination__item" 
+            v-for="page in pagination.total_pages" 
+            :key="page"
+            :class="{'active': page === pagination.current_page}"
+            @click="$emit('getProduct',page)">
+            <span>{{ page }}</span>
+        </li>
+        <li v-show="pagination.has_next" class="pagination__next" @click="$emit('getProduct',pagination.current_page + 1)"> <span>Next<i class="fas fa-chevron-right"></i></span></li>
+    </ul>
+    
     `
 })
 
