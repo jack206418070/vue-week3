@@ -263,7 +263,7 @@ app.component('modal',{
             <template v-if="tempProduct.imageUrl">
                 <div class="file__img">
                         <div class="file__img__del" @click="tempProduct.imageUrl = '' ">刪除</div>
-                        <img style="height: 80px" :src="tempProduct.imageUrl">
+                        <img class="pe-3" style="height: 80px" :src="tempProduct.imageUrl">
                 </div>
             </template>
         </div>
@@ -273,7 +273,7 @@ app.component('modal',{
                 <template v-if="tempProduct.imagesUrl.length > 0">
                     <div class="file__img" v-for="(image, key) in tempProduct.imagesUrl" :key="image">
                         <div class="file__img__del" @click="tempProduct.imagesUrl.splice(key, 1)">刪除</div>
-                        <img style="height: 80px" :src="image" >
+                        <img class="pe-3" style="height: 80px" :src="image" >
                     </div>
                 </template>
         </div>
