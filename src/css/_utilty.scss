@@ -60,7 +60,10 @@
           background-color: $secondary;
       }
       &--gray{
-          background-color: #eee;
+          background-color: #ddd;
+      }
+      &--gray--300{
+        background-color: #eee;
       }
   }
   

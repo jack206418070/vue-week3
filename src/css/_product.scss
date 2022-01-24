@@ -221,8 +221,9 @@ section > .content{
     }
     >ul{
         >li{
-            padding: 10px;
+            padding: 8px 10px;
             transition: transform 0.3s;
+            border-bottom: 1px solid #999;
         }
     }
     .info__group, h3{
