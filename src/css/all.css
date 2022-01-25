@@ -1180,9 +1180,11 @@ h1 {
   padding-top: 63px;
   position: relative;
   background-color: #257784;
-  min-height: 100vh;
   -webkit-transition: .3s;
   transition: .3s;
+  -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
+      align-self: stretch;
 }
 
 .side-menu.show {

@@ -5,6 +5,7 @@ const app = createApp({
         return {
             apiUrl: 'https://vue3-course-api.hexschool.io/v2',
             path: 'ginjack',
+            searchText: '',
             categoryArr: ['蔬果', '海鮮', '肉品'],
             modalControl: {
                 is_add: false,
@@ -13,14 +14,13 @@ const app = createApp({
             },
             is_loading: false,
             ascending: false,
-            products: [],
             sideToggle: true,
+            products: [],
+            tempProducts: null,
+            pagination: {},
             editTempProduct: {
                 imagesUrl: []
-            },
-            searchText: '',
-            pagination: {},
-            filterType:'all',
+            }
         }
     },
     methods: {
@@ -47,7 +47,8 @@ const app = createApp({
         },
         getProducts(page = 1) {
             this.is_loading = true;
-            this.filterType = 'all';
+            this.tempProducts = null;
+            this.searchText = '';
             axios.get(`${this.apiUrl}/api/${this.path}/admin/products?page=${page}`)
                 .then((res) => {
                     if (res.data.success) {
@@ -113,29 +114,24 @@ const app = createApp({
         }
     },
     computed: {
-        filterProducts() {
-            if(this.filterType === 'all'){
-                this.tempProducts = [];
-                return this.products;
-            }else if(this.filterType === 'price'){
-                this.tempProducts.length === 0 ? 
-                    this.tempProducts = JSON.parse(JSON.stringify(this.products)) :
-                    this.tempProducts;
-                    this.tempProducts.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
-                return this.tempProducts;
-            }else if(this.filterType === 'search'){
-                if(this.searchText === ''){
-                    this.tempProducts = JSON.parse(JSON.stringify(this.products));
-                    return this.products;
-                }else{
+        filterProducts: {
+            get(){
+                return this.tempProducts || this.products;
+            },
+            set(val) {
+                if(val === 'search'){
                     this.tempProducts = [];
                     this.products.forEach(product => {
-                        if (product.title.match(this.searchText.trim())) {
+                        if(product.title.match(this.searchText)){
                             this.tempProducts.push(product);
                         }
                     })
+                    return this.tempProducts;
+                }else if(val === 'price'){
+                    this.tempProducts = this.tempProducts || JSON.parse(JSON.stringify(this.products));
+                    this.tempProducts.sort((a, b) => this.ascending ? a.price - b.price : b.price - a.price);
+                    return this.tempProducts;
                 }
-                return this.tempProducts;
             }
         }
     },
@@ -250,11 +246,11 @@ app.component('modal', {
         <div class="form-group">
             <div class="form-control w-50">
                 <label for="originPrice">原始價格</label>
-                <input id="originPrice" type="number" v-model.number="tempProduct.origin_price">
+                <input id="originPrice" type="number" min=0 v-model.number="tempProduct.origin_price">
             </div>
             <div class="form-control w-50">
                 <label for="price">販售價格</label>
-                <input id="price" type="number" v-model.number="tempProduct.price">
+                <input id="price" type="number" min=0 v-model.number="tempProduct.price">
             </div>
         </div>
         <div class="form-group">

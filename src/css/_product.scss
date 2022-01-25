@@ -63,8 +63,9 @@ h1{
     padding-top: 63px;
     position: relative;
     background-color: lighten($primary, 10%);
-    min-height: 100vh;
+    // min-height: 100vh;
     transition:.3s;
+    align-self:stretch;
     &.show{
         display: block;
     }

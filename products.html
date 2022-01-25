@@ -95,7 +95,7 @@
                             >
                                 <span>全部商品</span>
                             </div>
-                            <input @change=" filterType = 'search' " type="text" class="py-2 px-2 w-100" v-model.trim="searchText">
+                            <input @change=" filterProducts = 'search' " type="text" class="py-2 px-2 w-100" v-model.trim="searchText">
                         </div>    
                     </div>
                     <div class="total__product w-80 d-flex align-items-center jy-content-between">
@@ -110,7 +110,7 @@
                                 <div class="info__group w-80">
                                     <ul class="d-flex fw-bold">
                                         <li class="w-15 d-sm-none">原價</li>
-                                        <li class="w-15" @click="ascending = !ascending; filterType = 'price' " style="cursor: pointer">售價
+                                        <li class="w-15" @click="ascending = !ascending; filterProducts = 'price' " style="cursor: pointer">售價
                                             <i v-if="ascending === false" class="fas fa-sort-numeric-up-alt ms-2"></i>
                                             <i v-else class="fas fa-sort-numeric-down ms-2"></i>
                                         </li>
